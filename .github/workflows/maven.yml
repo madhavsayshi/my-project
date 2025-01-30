@@ -33,9 +33,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Build and push docker image
-      uses: docker/build-push-action@v2
-      with:
-        image: madhavp8553/ci-cd-check
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/spring-boot-docker .
+        docker push ${{ secrets.DOCKER_USERNAME }}/spring-boot-docker
